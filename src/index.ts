@@ -67,6 +67,10 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
         return obj
     }
     deserialize(data: any): Dictionary<Type> {
+        if (data == {}) {
+            return new Dictionary()
+        }
+
         let type = DictionaryConverter.getNextType()
         let dict = new Dictionary<Type>()
         let convert = new JsonConvert()
