@@ -67,7 +67,7 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
         return obj
     }
     deserialize(data: any): Dictionary<Type> {
-        if (data == {}) {
+        if (Object.keys(data).length === 0 && data.constructor === Object) {
             return new Dictionary()
         }
 
