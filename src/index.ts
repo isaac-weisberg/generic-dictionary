@@ -4,13 +4,21 @@ import { JsonObject, JsonConvert, JsonProperty, JsonConverter, JsonCustomConvert
     [id: string]: Type
 }
 
+export interface TypeInspectable {
+    inspectableTypeID: string
+}
+
+function isTypeInstpectable(obj: any): obj is TypeInspectable {
+    return "inspectableTypeID" in obj && typeof obj.inspectableTypeID === 'string'
+}
+
 @JsonConverter
 export class StringDictionaryConverter implements JsonCustomConvert<Dictionary<string>> {
     serialize(data: Dictionary<string>): any {
         let obj: any = {}
         for (let key in data) {
             let value = data[key]
-            if (value && typeof value == 'string') {
+            if (value && typeof value === 'string') {
                 obj[key] = value
             }
         }
@@ -20,41 +28,16 @@ export class StringDictionaryConverter implements JsonCustomConvert<Dictionary<s
         let dict = new Dictionary<string>()
         for (let key in data) {
             let obj = data[key]
-            if (obj && typeof obj == 'string') {
+            if (obj && typeof obj === 'string') {
                 dict[key] = obj
             }
         }
         return dict
     }
-} 
+}
 
 @JsonConverter
 export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<Type>> {
-    private static iden: string = ""
-    private static gets = 0
-    private static constructors: {[id: string]: (new () => any)[]} = {}
-
-    static beginDeserialization(iden: string) {
-        this.iden = iden
-        this.gets = 0
-    }
-
-    static getConstructor<GenericType>(type: new () => GenericType, iden: string): new () => DictionaryConverter<GenericType> {
-        let array: any[] = this.constructors[iden]
-        if (!array) {
-            array = []
-            this.constructors[iden] = array
-        }
-        array.push(type)
-        return DictionaryConverter
-    }
-
-    private static getNextType(): any {
-        let constr = this.constructors[this.iden][this.gets]
-        this.gets++
-        return constr
-    }
-
     serialize(data: Dictionary<Type>): any {
         let convert = new JsonConvert()
         let obj: any = {}
@@ -70,8 +53,13 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
         if (Object.keys(data).length === 0 && data.constructor === Object) {
             return new Dictionary()
         }
-
-        let type = DictionaryConverter.getNextType()
+        let type: (new () => any)|undefined = undefined
+        if (isTypeInstpectable(data)) {
+            type = typeRegistry[data.inspectableTypeID]
+        }
+        if (!type) {
+            return new Dictionary()
+        }
         let dict = new Dictionary<Type>()
         let convert = new JsonConvert()
         for (let key in data) {
@@ -80,3 +68,5 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
         return dict
     }
 }
+
+export const typeRegistry = new Dictionary<(new () => any)>()
