@@ -1,0 +1,15 @@
+{
+  "name": "genericdictionary",
+  "version": "1.0.0",
+  "description": "A generic dictionary",
+  "main": "dist/index.js",
+  "typings": "dist/index",
+  "scripts": {
+    "postinstall": "tsc"
+  },
+  "author": "Isaac Carol Weisberg",
+  "license": "ISC",
+  "dependencies": {
+    "json2typescript": "^1.0.5"
+  }
+}
