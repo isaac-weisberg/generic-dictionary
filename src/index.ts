@@ -5,6 +5,30 @@ import { JsonObject, JsonConvert, JsonProperty, JsonConverter, JsonCustomConvert
 }
 
 @JsonConverter
+export class StringDictionaryConverter implements JsonCustomConvert<Dictionary<string>> {
+    serialize(data: Dictionary<string>): any {
+        let obj: any = {}
+        for (let key in data) {
+            let value = data[key]
+            if (value && typeof value == 'string') {
+                obj[key] = value
+            }
+        }
+        return obj
+    }
+    deserialize(data: any): Dictionary<string> {
+        let dict = new Dictionary<string>()
+        for (let key in data) {
+            let obj = data[key]
+            if (obj && typeof obj == 'string') {
+                dict[key] = obj
+            }
+        }
+        return dict
+    }
+} 
+
+@JsonConverter
 export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<Type>> {
     private static iden: string = ""
     private static gets = 0
