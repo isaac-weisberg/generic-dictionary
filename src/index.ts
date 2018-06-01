@@ -10,7 +10,7 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
     private static gets = 0
     private static constructors: {[id: string]: (new () => any)[]} = {}
 
-    private static beginDeserialization(iden: string) {
+    static beginDeserialization(iden: string) {
         this.iden = iden
         this.gets = 0
     }
