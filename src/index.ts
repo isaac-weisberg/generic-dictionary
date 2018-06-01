@@ -1,6 +1,6 @@
 import { JsonObject, JsonConvert, JsonProperty, JsonConverter, JsonCustomConvert } from 'json2typescript'
 
-@JsonObject export class Dictionary<Type> {
+@JsonObject export class Dictionary<Type extends TypeInspectable|string|Object> {
     [id: string]: Type
 }
 
@@ -13,38 +13,18 @@ function isTypeInstpectable(obj: any): obj is TypeInspectable {
 }
 
 @JsonConverter
-export class StringDictionaryConverter implements JsonCustomConvert<Dictionary<string>> {
-    serialize(data: Dictionary<string>): any {
-        let obj: any = {}
-        for (let key in data) {
-            let value = data[key]
-            if (value && typeof value === 'string') {
-                obj[key] = value
-            }
-        }
-        return obj
-    }
-    deserialize(data: any): Dictionary<string> {
-        let dict = new Dictionary<string>()
-        for (let key in data) {
-            let obj = data[key]
-            if (obj && typeof obj === 'string') {
-                dict[key] = obj
-            }
-        }
-        return dict
-    }
-}
-
-@JsonConverter
-export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<Type>> {
+export class DictionaryConverter<Type extends TypeInspectable|string> implements JsonCustomConvert<Dictionary<Type>> {
     serialize(data: Dictionary<Type>): any {
         let convert = new JsonConvert()
         let obj: any = {}
         for (let key in data) {
             let object = data[key]
             if (object) {
-                obj[key] = convert.serialize(object)
+                if (typeof object === 'string') {
+                    obj[key] = object
+                } else {
+                    obj[key] = convert.serialize(object)
+                }
             }
         }
         return obj
@@ -63,7 +43,12 @@ export class DictionaryConverter<Type> implements JsonCustomConvert<Dictionary<T
         let dict = new Dictionary<Type>()
         let convert = new JsonConvert()
         for (let key in data) {
-            dict[key] = convert.deserialize(data[key], type)
+            let object = data[key]
+            if (typeof object === 'string') {
+                (dict as any)[key] = object
+            } else {
+                dict[key] = convert.deserialize(object, type)
+            }
         }
         return dict
     }
