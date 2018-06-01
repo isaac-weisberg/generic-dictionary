@@ -34,9 +34,14 @@ export class DictionaryConverter<Type extends TypeInspectable|string> implements
             return new Dictionary()
         }
         let type: (new () => any)|undefined = undefined
-        if (isTypeInstpectable(data)) {
-            type = typeRegistry[data.inspectableTypeID]
+        for (let key in data) {
+            let value = data[key]
+            if (isTypeInstpectable(value)) {
+                type = typeRegistry[value.inspectableTypeID]
+            }
+            break
         }
+
         if (!type) {
             return new Dictionary()
         }
