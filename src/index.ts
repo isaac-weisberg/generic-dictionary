@@ -9,7 +9,7 @@ export interface TypeInspectable {
 }
 
 function isTypeInstpectable(obj: any): obj is TypeInspectable {
-    return "inspectableTypeID" in obj && typeof obj.inspectableTypeID === 'string'
+    return typeof obj === "object" && "inspectableTypeID" in obj && typeof obj.inspectableTypeID === 'string'
 }
 
 @JsonConverter
@@ -41,10 +41,7 @@ export class DictionaryConverter<Type extends TypeInspectable|string> implements
             }
             break
         }
-
-        if (!type) {
-            return new Dictionary()
-        }
+        
         let dict = new Dictionary<Type>()
         let convert = new JsonConvert()
         for (let key in data) {
@@ -52,6 +49,9 @@ export class DictionaryConverter<Type extends TypeInspectable|string> implements
             if (typeof object === 'string') {
                 (dict as any)[key] = object
             } else {
+                if (!type) {
+                    return new Dictionary()
+                }
                 dict[key] = convert.deserialize(object, type)
             }
         }
