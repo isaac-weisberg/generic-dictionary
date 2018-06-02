@@ -1,7 +1,7 @@
 {
   "name": "genericdictionary",
   "version": "1.0.0",
-  "description": "A generic dictionary",
+  "description": "A generic dictionary, with json2typescript serialization support.",
   "main": "dist/index.js",
   "typings": "dist/index",
   "scripts": {
@@ -9,6 +9,14 @@
   },
   "author": "Isaac Carol Weisberg",
   "license": "ISC",
+  "files": [
+    "./*.js",
+    "./*.js.map",
+    "./*.d.ts",
+    "./src/*.d.ts",
+    "./src/*.js",
+    "./src/*.js.map"
+  ],
   "dependencies": {
     "json2typescript": "^1.0.5"
   }

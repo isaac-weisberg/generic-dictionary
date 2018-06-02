@@ -1,4 +1,11 @@
-BUILDDIR=./dist/
+EXEC=index.js
+BUILDFILES=\
+	./*.js \
+	./*.js.map \
+	./*.d.ts \
+	./src/*.d.ts \
+	./src/*.js \
+	./src/*.js.map \
 
 default: build run
 
@@ -6,7 +13,7 @@ build:
 	tsc
 
 run:
-	node $(BUILDDIR)index.js 
+	node $(EXEC)
 
 clean:
-	-rm -rf $(BUILDDIR)*
+	-rm -rf $(BUILDFILES)
