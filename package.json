@@ -1,5 +1,5 @@
 {
-  "name": "genericdictionary",
+  "name": "generic-dictionary-ts",
   "version": "1.0.0",
   "description": "A generic dictionary, with json2typescript serialization support.",
   "main": "index.js",
