@@ -8,13 +8,14 @@
   },
   "author": "Isaac Carol Weisberg",
   "license": "ISC",
+  "repository": "https://github.com/isaac-weisberg/generic-dictionary",
   "files": [
-    "./*.js",
-    "./*.js.map",
-    "./*.d.ts",
-    "./src/*.d.ts",
-    "./src/*.js",
-    "./src/*.js.map"
+    "index.js",
+    "index.js.map",
+    "index.d.ts",
+    "src/*.d.ts",
+    "src/*.js",
+    "src/*.js.map"
   ],
   "dependencies": {
     "json2typescript": "^1.0.5"
