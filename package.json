@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index",
   "scripts": {
-    "postinstall": "tsc"
+    
   },
   "author": "Isaac Carol Weisberg",
   "license": "ISC",
